@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Marks Method — Drill Workbook</title>
+<style>
+  :root{
+    --ink:#211d17; --ink-soft:#4a4338; --parch:#f6f1e7; --parch-2:#efe7d7;
+    --card:#fffdf8; --oak:#8a6d3b; --oak-deep:#6b5224; --gold:#b9912f;
+    --rule:#d9cdb4; --green:#3f6b4a; --red:#9a3b2f; --shadow:0 2px 14px rgba(60,45,20,.08);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--parch);color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;line-height:1.6;font-size:16px}
+  .bar{position:sticky;top:0;z-index:20;background:var(--parch-2);border-bottom:1px solid var(--rule);
+    padding:12px 28px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .bar .brand{font-weight:700;color:var(--oak-deep);font-size:16px;letter-spacing:.3px;margin-right:auto}
+  .bar button{font-family:inherit;font-size:13px;cursor:pointer;border-radius:6px;padding:7px 14px;border:0}
+  .bar button.primary{background:var(--oak);color:#fff}
+  .bar button.ghost{background:transparent;color:var(--oak-deep);border:1px solid var(--oak)}
+  .bar .saved{font-size:12px;color:var(--green);font-style:italic;min-width:90px}
+  main{max-width:880px;margin:0 auto;padding:34px 28px 120px}
+  .hero{border-bottom:2px solid var(--oak);padding-bottom:20px;margin-bottom:8px}
+  .hero .eyebrow{text-transform:uppercase;letter-spacing:3px;font-size:11.5px;color:var(--oak)}
+  .hero h1{font-size:36px;margin:8px 0 4px;line-height:1.1}
+  .hero p{font-style:italic;color:var(--ink-soft);margin:4px 0 0}
+  .intro{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:16px 20px;margin:20px 0;
+    box-shadow:var(--shadow);font-size:15px}
+  .meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+  .meta label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--oak-deep);margin-bottom:4px}
+  input[type=text]{width:100%;font-family:inherit;font-size:15px;padding:8px 10px;border:1px solid var(--rule);
+    border-radius:6px;background:var(--card);color:var(--ink)}
+  h2.sec{font-size:24px;margin:42px 0 6px;padding-top:14px;border-top:1px solid var(--rule);color:var(--oak-deep)}
+  h2.sec .pn{display:block;font-size:11.5px;letter-spacing:2px;text-transform:uppercase;color:var(--oak);font-weight:400}
+  .secnote{color:var(--ink-soft);font-size:14.5px;margin:0 0 8px}
+  .step{background:var(--card);border:1px solid var(--rule);border-radius:9px;margin:14px 0;box-shadow:var(--shadow);overflow:hidden}
+  .step .head{display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(0deg,var(--parch-2),transparent)}
+  .step .num{flex:0 0 34px;height:34px;border-radius:50%;background:var(--oak);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .step .st{flex:1;font-size:18px;font-weight:700}
+  .step .prompt{padding:0 18px 4px;color:var(--ink-soft);font-size:14px}
+  .step .prompt b{color:var(--oak-deep)}
+  textarea{width:100%;min-height:84px;font-family:inherit;font-size:15px;line-height:1.55;padding:12px 14px;
+    border:0;border-top:1px solid var(--rule);background:transparent;color:var(--ink);resize:vertical}
+  textarea:focus{outline:none;background:#fffef9}
+  .example{margin:2px 18px 16px;font-size:13.5px}
+  .example summary{cursor:pointer;color:var(--oak);font-style:italic;list-style:none}
+  .example summary::before{content:'▸ ';}
+  .example[open] summary::before{content:'▾ ';}
+  .example .ex{background:#f3efe4;border-left:3px solid var(--gold);padding:10px 14px;margin-top:8px;
+    color:var(--ink-soft);border-radius:0 6px 6px 0}
+  .check{display:flex;gap:11px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--parch-2)}
+  .check input{margin-top:5px;width:17px;height:17px;accent-color:var(--oak);flex:0 0 auto;cursor:pointer}
+  .check label{cursor:pointer;font-size:15px}
+  .check .q{font-weight:700}
+  .tmpl{background:var(--card);border:1px solid var(--rule);border-radius:9px;padding:8px 18px 4px;margin:14px 0;box-shadow:var(--shadow)}
+  .tmpl h3{font-size:18px;color:var(--oak-deep);margin:12px 0 2px}
+  .tmpl .fl{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--oak);margin:10px 0 0}
+  .verdict{margin:8px 0 16px;padding:12px 16px;border-radius:8px;background:var(--parch-2);font-size:15px}
+  .verdict b{color:var(--oak-deep)}
+  /* Stress-Test Lab */
+  .caveat{background:#f3eee2;border:1px solid var(--rule);border-left:4px solid var(--oak);border-radius:0 8px 8px 0;
+    padding:12px 16px;margin:10px 0 18px;font-size:13.5px;color:var(--ink-soft);font-style:italic}
+  .caveat b{color:var(--oak-deep);font-style:normal}
+  .lab{background:var(--card);border:1px solid var(--rule);border-radius:9px;padding:16px 20px 18px;margin:14px 0;box-shadow:var(--shadow)}
+  .lab h3{font-size:19px;color:var(--oak-deep);margin:0 0 2px}
+  .lab .ld{color:var(--ink-soft);font-size:13.5px;margin:0 0 12px}
+  .row{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;margin:8px 0}
+  .fld{flex:1;min-width:130px}
+  .fld label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--oak-deep);margin-bottom:3px}
+  .fld input[type=number]{width:100%;font-family:inherit;font-size:15px;padding:7px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--card);color:var(--ink)}
+  .fld select{width:100%;font-family:inherit;font-size:14px;padding:7px 9px;border:1px solid var(--rule);border-radius:6px;background:var(--card);color:var(--ink)}
+  .slide{margin:6px 0}
+  .slide label{display:flex;justify-content:space-between;font-size:12.5px;color:var(--oak-deep);margin-bottom:2px}
+  .slide label b{color:var(--ink)}
+  .slide input[type=range]{width:100%;accent-color:var(--oak)}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
+  .chips button{font-family:inherit;font-size:12px;cursor:pointer;background:var(--parch-2);color:var(--oak-deep);
+    border:1px solid var(--rule);border-radius:20px;padding:5px 12px}
+  .chips button:hover{background:var(--oak);color:#fff}
+  .result{margin-top:12px;padding:14px 16px;border-radius:8px;font-size:14.5px;border:1px solid var(--rule)}
+  .result.safe{background:#eef4ea;border-color:#cfe0c4}
+  .result.warn{background:#f6ece6;border-color:#e6c9bb}
+  .result.neutral{background:var(--parch-2)}
+  .result .big{font-size:22px;font-weight:700;color:var(--ink);display:block;margin-bottom:4px}
+  .result .tag{font-weight:700}
+  .result .tag.ok{color:var(--green)} .result .tag.bad{color:var(--red)}
+  .fan-grid{display:grid;grid-template-columns:auto 1fr 1fr 1fr;gap:6px 10px;align-items:center;font-size:13.5px;margin:6px 0}
+  .fan-grid .h{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--oak);font-weight:700;text-align:center}
+  .fan-grid .rl{color:var(--oak-deep);font-weight:700}
+  .fan-grid input{width:100%;font-family:inherit;font-size:14px;padding:5px 7px;border:1px solid var(--rule);border-radius:5px;text-align:center;background:var(--card)}
+  .fanbar{position:relative;height:30px;background:var(--parch-2);border-radius:6px;margin:6px 0;overflow:hidden}
+  .fanbar .span{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#cdbf9c,var(--gold));opacity:.55}
+  .fanbar .mid{position:absolute;top:0;bottom:0;width:2px;background:var(--oak-deep)}
+  .fanbar .lbl{position:absolute;font-size:11px;color:var(--ink);top:7px}
+  /* Charts */
+  .charts{display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:14px 0 4px}
+  .donut-wrap{flex:0 0 auto;display:flex;align-items:center;gap:12px}
+  .donut-wrap svg{width:128px;height:128px}
+  .legend{font-size:13px}
+  .legend .li{display:flex;align-items:center;gap:7px;margin:3px 0}
+  .legend .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .legend .pc{color:var(--ink-soft)}
+  .scen-wrap{flex:1;min-width:280px}
+  .charttitle{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--oak);font-weight:700;margin-bottom:4px}
+  .scen-wrap svg,.cone-wrap svg{width:100%;height:auto;display:block}
+  .cone-wrap{margin:8px 0}
+  .dots{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0;max-width:520px}
+  .dot{width:15px;height:15px;border-radius:50%;background:var(--parch-2);border:1px solid var(--rule)}
+  .dot.best{background:var(--oak);border-color:var(--oak-deep)}
+  .dot.dilute{background:#e7ddc8}
+  .meter{height:14px;background:var(--parch-2);border-radius:7px;overflow:hidden;margin:3px 0 2px}
+  .meter > div{height:100%;border-radius:7px;transition:width .25s}
+  .meter.idea > div{background:linear-gradient(90deg,var(--oak),var(--gold))}
+  .meter.index > div{background:linear-gradient(90deg,#9a3b2f,#c46a4d)}
+  .meterrow{margin:10px 0}
+  .meterrow .ml{display:flex;justify-content:space-between;font-size:12.5px;color:var(--oak-deep);margin-bottom:1px}
+  .meterrow .ml b{color:var(--ink)}
+  footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-soft);font-style:italic}
+  @media print{
+    .bar{display:none} .example{display:none} body{background:#fff;font-size:12px}
+    textarea{border:1px solid #ccc;min-height:60px} .step,.intro,.tmpl{box-shadow:none;break-inside:avoid}
+    main{padding:0}
+  }
+  @media(max-width:680px){.meta{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <span class="brand">The Marks Method · Drill Workbook</span>
+  <span class="saved" id="savedMsg"></span>
+  <button class="primary" onclick="save()">Save</button>
+  <button class="ghost" onclick="loadData()">Load saved</button>
+  <button class="ghost" onclick="window.print()">Print / PDF</button>
+  <button class="ghost" onclick="clearAll()">Clear</button>
+</div>
+
+<main>
+  <div class="hero">
+    <div class="eyebrow">Run a real portfolio the way he would</div>
+    <h1>The Drill Workbook</h1>
+    <p>Where the framework stops being words and becomes a skill. Fill it in for a live decision — your own, a hypothetical, even a single "should I buy X?"</p>
+  </div>
+
+  <div class="intro">
+    <b>How to use it.</b> Work top to bottom — the order is the discipline. Don't reach for a security until you've earned your way down to Step 4. Each step has a prompt and a collapsible worked example showing the standard you're aiming for. Your entries save to this browser with <b>Save</b>; <b>Print / PDF</b> makes a clean copy to keep or hand in. Treat every blank as a question Marks would actually ask you across the desk.
+  </div>
+
+  <div class="meta">
+    <div><label>Portfolio / decision</label><input type="text" data-k="meta_name" placeholder="e.g. My retirement portfolio · or 'Should I buy XYZ?'"></div>
+    <div><label>Date</label><input type="text" data-k="meta_date" placeholder="10 June 2026"></div>
+  </div>
+
+  <h2 class="sec"><span class="pn">Part V · The Craft</span>The Seven-Step Process</h2>
+  <p class="secnote">The spine of the craft. The order is the point — most people start at Step 7. Start at Step 1 and earn your way down.</p>
+
+  <div id="steps"></div>
+
+  <h2 class="sec"><span class="pn">Step 6, made concrete</span>The Stress-Test Lab</h2>
+  <p class="secnote">Marks's stress test asks one question above all: <i>in the bad case, is this a recoverable paper loss, or a permanent one?</i> A drawdown you can hold through is volatility; a drawdown that forces you to sell is the permanent loss that actually matters. These three tools put that question on the table.</p>
+  <div class="caveat"><b>Keep the boundary in mind.</b> These are judgment aids, not forecasts. Marks distrusts models fed by historical inputs — "garbage in, garbage out," with the added danger that the math lends false comfort. The numbers below illustrate the <i>shape</i> of outcomes and the <i>survival</i> question; they don't predict, and they never override your judgment. Change the assumptions and watch what moves.</div>
+
+  <div class="lab" id="lab1">
+    <h3>1 · Downside Survival Test</h3>
+    <p class="ld">Does the bad case stay a paper loss, or does it force selling? Set your mix and a shock, and watch whether your cash and reserves can carry your spending without liquidating depressed assets.</p>
+    <div class="row">
+      <div class="fld"><label>Portfolio value ($)</label><input type="number" data-k="st_pv" id="st_pv" value="500000"></div>
+      <div class="fld"><label>Ownership %</label><input type="number" data-k="st_own" id="st_own" value="65" min="0" max="100"></div>
+      <div class="fld"><label>Debt %</label><input type="number" data-k="st_debt" id="st_debt" value="35" min="0" max="100"></div>
+      <div class="fld"><label>Cash % <span id="st_cashlbl" style="color:var(--ink-soft)"></span></label><input type="number" id="st_cash" value="0" disabled style="opacity:.7"></div>
+    </div>
+    <div class="row">
+      <div class="fld"><label>Annual spending drawn from portfolio ($)</label><input type="number" data-k="st_spend" id="st_spend" value="0"></div>
+      <div class="fld"><label>Emergency fund outside portfolio (months of spending)</label><input type="number" data-k="st_buffer" id="st_buffer" value="6"></div>
+    </div>
+    <p class="ld" style="margin:10px 0 2px"><b>Scenario</b> — pick a preset (it sets the shocks), then adjust:</p>
+    <div class="chips">
+      <button onclick="preset(-15,0)">Mild correction</button>
+      <button onclick="preset(-35,5)">Sharp recession (flight to quality)</button>
+      <button onclick="preset(-50,-5)">2008-type crisis</button>
+      <button onclick="preset(-22,-15)">Inflation / rate shock</button>
+    </div>
+    <div class="slide"><label>Ownership shock <b id="st_oshock_v">−35%</b></label><input type="range" data-k="st_oshock" id="st_oshock" min="-70" max="10" value="-35" oninput="survival()"></div>
+    <div class="slide"><label>Debt shock <b id="st_dshock_v">+5%</b></label><input type="range" data-k="st_dshock" id="st_dshock" min="-30" max="15" value="5" oninput="survival()"></div>
+    <div class="charts">
+      <div class="donut-wrap">
+        <svg id="st_donut" viewBox="0 0 120 120" aria-label="Allocation"></svg>
+        <div class="legend" id="st_legend"></div>
+      </div>
+      <div class="scen-wrap">
+        <div class="charttitle">Same allocation, four scenarios — ending value vs. today</div>
+        <svg id="st_scenchart" viewBox="0 0 360 170" aria-label="Scenario comparison"></svg>
+      </div>
+    </div>
+    <div class="result neutral" id="st_out"></div>
+  </div>
+
+  <div class="lab" id="lab2">
+    <h3>2 · Margin-of-Safety Stressor</h3>
+    <p class="ld">Concept 10's drill, live. Buy enough below value that you can be <i>wrong</i> about value and still avoid permanent loss. Enter your estimate and price, then stress the estimate downward and see whether you're still protected.</p>
+    <div class="row">
+      <div class="fld"><label>Your estimate of value ($)</label><input type="number" data-k="mos_val" id="mos_val" value="100" oninput="mos()"></div>
+      <div class="fld"><label>Price you'd pay ($)</label><input type="number" data-k="mos_price" id="mos_price" value="70" oninput="mos()"></div>
+    </div>
+    <div class="slide"><label>What if my value estimate is too high by <b id="mos_over_v">30%</b></label><input type="range" data-k="mos_over" id="mos_over" min="0" max="60" value="30" oninput="mos()"></div>
+    <div class="result neutral" id="mos_out"></div>
+  </div>
+
+  <div class="lab" id="lab3">
+    <h3>3 · Range of Outcomes — the Fan</h3>
+    <p class="ld">Never a point forecast (Step 7). Give a posture and three honest environments, and read the <i>range</i> the blend produces — and how far apart good and bad really are. The width of the fan is the risk.</p>
+    <div class="row">
+      <div class="fld"><label>Ownership %</label><input type="number" data-k="fan_own" id="fan_own" value="65" min="0" max="100" oninput="fan()"></div>
+      <div class="fld"><label>Debt % <span id="fan_dlbl" style="color:var(--ink-soft)"></span></label><input type="number" id="fan_debt" value="35" disabled style="opacity:.7"></div>
+      <div class="fld"><label>Horizon (years)</label><input type="number" data-k="fan_h" id="fan_h" value="10" min="1" oninput="fan()"></div>
+    </div>
+    <div class="fan-grid">
+      <div></div><div class="h">Bad</div><div class="h">Base</div><div class="h">Good</div>
+      <div class="rl">Ownership return %/yr</div>
+        <input type="number" data-k="fan_ow" id="fan_ow" value="-4" oninput="fan()">
+        <input type="number" data-k="fan_ob" id="fan_ob" value="7" oninput="fan()">
+        <input type="number" data-k="fan_og" id="fan_og" value="12" oninput="fan()">
+      <div class="rl">Debt return %/yr</div>
+        <input type="number" data-k="fan_dw" id="fan_dw" value="3" oninput="fan()">
+        <input type="number" data-k="fan_db" id="fan_db" value="5" oninput="fan()">
+        <input type="number" data-k="fan_dg" id="fan_dg" value="6" oninput="fan()">
+    </div>
+    <div class="cone-wrap"><svg id="fan_cone" viewBox="0 0 380 200" aria-label="Range of outcomes over time"></svg></div>
+    <div class="result neutral" id="fan_out"></div>
+  </div>
+
+  <div class="lab" id="lab4">
+    <h3>4 · Concentration vs. Over-Diversification</h3>
+    <p class="ld">Marks's "dare to be great" tension. You can't beat the index if you've quietly rebuilt it. Each name beyond your best ideas dilutes your conviction and drags the portfolio toward the average. Drag the count and watch your best ideas get watered down.</p>
+    <div class="slide"><label>Number of positions (roughly equal-weighted) <b id="conc_n_v">20</b></label><input type="range" data-k="conc_n" id="conc_n" min="1" max="80" value="20" oninput="conc()"></div>
+    <div class="dots" id="conc_dots"></div>
+    <div class="meterrow">
+      <div class="ml">Share of capital in your 10 highest-conviction ideas <b id="conc_top_v"></b></div>
+      <div class="meter idea"><div id="conc_top_bar"></div></div>
+    </div>
+    <div class="meterrow">
+      <div class="ml">Resemblance to a broad index (the closet-index trap) <b id="conc_idx_v"></b></div>
+      <div class="meter index"><div id="conc_idx_bar"></div></div>
+    </div>
+    <div class="result neutral" id="conc_out"></div>
+    <div class="caveat" style="margin-top:12px"><b>The boundary, honestly.</b> This illustrates Marks's <i>judgment</i> — diversifying into too many names dilutes your edge and recreates the benchmark (<i>Dare to Be Great</i>, 2006/2014). The precise <i>mathematics</i> of how many names cut risk, and how correlation changes the answer, is the mechanics layer Marks doesn't teach — don't read exact risk-reduction figures into this picture.</div>
+  </div>
+
+  <h2 class="sec"><span class="pn">Before it's final</span>The Standing Checklist</h2>
+  <p class="secnote">Every box gets an honest answer before the decision is committed.</p>
+  <div class="tmpl" id="checkBox" style="padding-bottom:14px"></div>
+  <div class="verdict" id="checkVerdict">Tick the boxes as you satisfy each one.</div>
+
+  <h2 class="sec"><span class="pn">Drill · ongoing</span>The Decision Journal</h2>
+  <p class="secnote">At the moment of decision, record your reasoning and the range you foresee. Later, grade the <i>decision</i> against what you knew <i>then</i> — not against how it turned out. This is how you judge process, not outcome (Concept 25).</p>
+  <div class="tmpl">
+    <div class="fl">The decision</div><textarea data-k="dj_decision" placeholder="What am I deciding, and what action does it imply?"></textarea>
+    <div class="fl">My reasoning right now</div><textarea data-k="dj_reasoning" placeholder="Why — in second-level terms? What does the consensus believe, and where do I diverge?"></textarea>
+    <div class="fl">The range of outcomes I foresee</div><textarea data-k="dj_range" placeholder="Good case / base case / bad case — and rough odds."></textarea>
+    <div class="fl">The single assumption this is most sensitive to</div><textarea data-k="dj_assumption" placeholder="If one thing is wrong and breaks the thesis, it's this:"></textarea>
+    <div class="fl">What would tell me I'm wrong</div><textarea data-k="dj_wrong" placeholder="The observable signal that would change my mind."></textarea>
+  </div>
+
+  <h2 class="sec"><span class="pn">Drill · weekly</span>The Weekly Memo</h2>
+  <p class="secnote">Marks's own method: writing is how you find out whether you actually think something or merely feel it. One short memo a week on one real decision (Concept 28).</p>
+  <div class="tmpl">
+    <div class="fl">Subject</div><textarea data-k="wm_subject" style="min-height:48px" placeholder="The one decision or question this memo is about."></textarea>
+    <div class="fl">The consensus — fairly stated, as its believers would put it</div><textarea data-k="wm_consensus" placeholder="If you can't state it, you only have an echo of it."></textarea>
+    <div class="fl">My view — and exactly where it diverges</div><textarea data-k="wm_view"></textarea>
+    <div class="fl">The downside — what permanent loss looks like</div><textarea data-k="wm_downside"></textarea>
+    <div class="fl">The one thing that would prove me wrong</div><textarea data-k="wm_disconfirm"></textarea>
+  </div>
+
+  <footer>
+    Built from <i>The Marks Method</i> master guide — Howard Marks's Oaktree memos (1990–2026) and his books <i>The Most Important Thing</i> (2011) and <i>Mastering the Market Cycle</i> (2018). Marks supplies the judgment; this workbook is where you practice the discipline. Saves locally to this browser only.
+  </footer>
+</main>
+
+<script>
+const STEPS=[
+ {n:1,t:"Start with the investor, not the assets",
+  prompt:"<b>Horizon, financial condition, income, spending needs, responsibilities, liquidity, taxes — and honest tolerance for a one-third fall.</b> Without these, no allocation is right or wrong. If you can't fill this, stop here.",
+  k:"s1",
+  ex:"45, stable salary, 20-year horizon, no near-term drawdown, emergency fund separate. Could stomach a 30% paper loss without selling — but has admitted to panic-selling once in 2020, so true fortitude is lower than claimed. That caps how much offense is appropriate."},
+ {n:2,t:"Set the risk posture — offense vs. defense",
+  prompt:"<b>State the offense/defense balance that fits THIS investor</b>, and decide: held constant, or allowed to vary with the cycle? Remember you can't maximize both. This decision governs all the others.",
+  k:"s2",
+  ex:"Posture: ~65% offense / 35% defense — long horizon argues for offense, but the 2020 episode argues for a real defensive ballast so they don't sell at the bottom. Held roughly constant, with modest cycle-tilts only at clear temperature extremes — not active timing."},
+ {n:3,t:"Express it as ownership vs. debt",
+  prompt:"<b>Translate the posture into a blend of the two asset classes</b>, judged by what each offers today. When debt yields approach equity-like returns, defense is cheap and deserves more weight; when negligible, it doesn't. What is debt yielding now vs. plausible ownership returns?",
+  k:"s3",
+  ex:"Ownership ~65% (broad equities), debt ~35% (quality bonds). With high-grade debt now yielding mid-single digits — far from the zero of a few years ago — defense is genuinely cheap (Sea Change). That justifies holding the full 35% in debt rather than reaching further into ownership for return."},
+ {n:4,t:"Compare price to value, separately — and locate the cycle",
+  prompt:"<b>For each exposure: what's already priced in?</b> Is the consensus too optimistic or too pessimistic? Where are we in the cycle (take the temperature)? Lean toward what's cheap relative to value, away from what the crowd adores. Keep value and price in separate columns.",
+  k:"s4",
+  ex:"Value: broad equity earnings yield is modest but not extreme. Price/mood: sentiment is warm, not euphoric — Stage 2 of the bull, leaning toward 3 in megacap tech where 'can't lose' talk is appearing (a warning). Lean: full diversification rather than concentration in the adored names; nothing here is a screaming bargain, so no aggressive tilt."},
+ {n:5,t:"Decide honestly whether to reach for alpha",
+  prompt:"<b>Default: assume you don't have alpha</b> and that low-cost broad exposure is the baseline. Depart from that only with a clear, skeptical reason. If you're paying for active management (including your own time), what's the honest evidence it's skill, not beta or luck?",
+  k:"s5",
+  ex:"No credible evidence of personal alpha — past 'wins' coincided with a rising market (beta, not skill). Decision: low-cost index exposure as the core. No departure from the baseline, because I can't honestly justify one. Revisit only if a genuine, asymmetric edge appears (upside capture > downside capture across a cycle)."},
+ {n:6,t:"Stress-test the downside",
+  prompt:"<b>Run the pre-mortem BEFORE sizing.</b> 'It's two years out and this caused real, permanent damage — what happened?' Write the story. What does permanent loss look like in the bad scenarios, not the expected one? Is it survivable at this size? Name the margin of safety.",
+  k:"s6",
+  ex:"Pre-mortem: a 40% equity drawdown coincides with a job loss, forcing sales at the bottom — the permanent loss. Defense against it: the 35% debt ballast plus the separate emergency fund means no forced selling; the drawdown stays a paper loss that recovers. Survivable. Margin of safety lives in the liquidity buffer, not in the entry price of any one holding."},
+ {n:7,t:"Produce a range and the key swing factor",
+  prompt:"<b>No false precision.</b> What does this posture produce across good and bad environments? Name the SINGLE assumption the outcome is most sensitive to — so you know what to watch and what would prove you wrong.",
+  k:"s7",
+  ex:"Range: good environment ~ high-single/low-double-digit annualized; bad environment a 25–35% drawdown that recovers given the horizon. Most sensitive assumption: that the investor actually holds through the bad case rather than selling. The whole plan rests on behavior, not on a market call — so the defensive ballast and pre-commitment matter more than the asset mix."}
+];
+
+const steps=document.getElementById('steps');
+STEPS.forEach(s=>{
+  const d=document.createElement('div'); d.className='step';
+  d.innerHTML=`<div class="head"><span class="num">${s.n}</span><span class="st">${s.t}</span></div>
+    <div class="prompt">${s.prompt}</div>
+    <textarea data-k="${s.k}" placeholder="Your answer…"></textarea>
+    <details class="example"><summary>See a worked example</summary><div class="ex">${s.ex}</div></details>`;
+  steps.appendChild(d);
+});
+
+const CHECK=[
+ "Whose money is this, and what do they need? (If unanswered, stop.)",
+ "What is the chosen risk posture — and is it fixed or cycle-varying?",
+ "What is the ownership-vs-debt ratio, and does it reflect today's offerings & cost of defense?",
+ "For each exposure: value vs. price — what's priced in, consensus too hot or cold?",
+ "Where are we in the cycle — most readings hot or cold? Which stage of belief?",
+ "Am I claiming alpha? If so, is the evidence skill, or beta/luck?",
+ "What is the permanent-loss case, and is it survivable at this size?",
+ "What's the margin of safety, named as a number and stress-tested?",
+ "What is the range of outcomes, and the single assumption it's most sensitive to?",
+ "Have I confused price with value, or process with outcome, anywhere?",
+ "Am I acting on analysis — or on greed, fear, or envy?",
+ "Where might I be wrong, and what would tell me so?"
+];
+const cb=document.getElementById('checkBox');
+CHECK.forEach((q,i)=>{
+  const d=document.createElement('div'); d.className='check';
+  d.innerHTML=`<input type="checkbox" data-k="chk${i}" id="wchk${i}" onchange="updCheck()"><label for="wchk${i}"><span class="q">${i+1}.</span> ${q}</label>`;
+  cb.appendChild(d);
+});
+function updCheck(){
+  const b=document.querySelectorAll('#checkBox input'); const done=[...b].filter(x=>x.checked).length;
+  const v=document.getElementById('checkVerdict');
+  v.innerHTML = done===b.length ? '<b>All 12 satisfied — the decision has been thought through, downside first.</b>' : `<b>${done} of 12</b> satisfied. The unticked boxes are the questions still unanswered.`;
+}
+
+// ---- Persistence (local file → localStorage works) ----
+const KEY='marksWorkbook';
+function collect(){const o={};document.querySelectorAll('[data-k]').forEach(el=>{o[el.dataset.k]= el.type==='checkbox'?el.checked:el.value;});return o;}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(collect()));flash('Saved ✓');}catch(e){flash('Save unavailable');}}
+function loadData(){try{const raw=localStorage.getItem(KEY);if(!raw){flash('Nothing saved yet');return;}const o=JSON.parse(raw);
+  document.querySelectorAll('[data-k]').forEach(el=>{if(o[el.dataset.k]!==undefined){if(el.type==='checkbox')el.checked=o[el.dataset.k];else el.value=o[el.dataset.k];}});
+  updCheck();flash('Loaded ✓');}catch(e){flash('Load failed');}}
+function clearAll(){if(!confirm('Clear every field in this workbook?'))return;document.querySelectorAll('[data-k]').forEach(el=>{if(el.type==='checkbox')el.checked=false;else el.value='';});updCheck();flash('Cleared');}
+let ft;function flash(m){const s=document.getElementById('savedMsg');s.textContent=m;clearTimeout(ft);ft=setTimeout(()=>s.textContent='',2500);}
+// autosave
+document.addEventListener('input',(e)=>{
+  if(e.target.closest && e.target.closest('.lab')) refreshTools();
+  clearTimeout(window._as);window._as=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(collect()));}catch(e){}},800);
+});
+function drawCone(bad,base,good,h){
+  const svg=document.getElementById('fan_cone'); if(!svg)return; svg.innerHTML='';
+  const W=380,H=200,padL=46,padR=14,padT=14,padB=26;
+  const plotW=W-padL-padR, plotH=H-padT-padB;
+  const start=100000;
+  const val=(r,t)=>start*Math.pow(1+r/100,t);
+  const ys=[]; for(let t=0;t<=h;t++){ys.push(val(bad,t),val(base,t),val(good,t));}
+  let vmin=Math.min(...ys,start), vmax=Math.max(...ys,start);
+  if(vmax===vmin)vmax=vmin+1;
+  const X=t=>padL+(t/h)*plotW;
+  const Y=v=>padT+plotH*(1-(v-vmin)/(vmax-vmin));
+  // axes
+  svg.appendChild(svgEl('line',{x1:padL,y1:padT,x2:padL,y2:padT+plotH,stroke:'#d9cdb4','stroke-width':1}));
+  svg.appendChild(svgEl('line',{x1:padL,y1:padT+plotH,x2:W-padR,y2:padT+plotH,stroke:'#d9cdb4','stroke-width':1}));
+  // start reference line
+  const sy=Y(start);
+  svg.appendChild(svgEl('line',{x1:padL,y1:sy,x2:W-padR,y2:sy,stroke:'#8a6d3b','stroke-width':1,'stroke-dasharray':'3 3',opacity:'.6'}));
+  // y labels
+  [vmax,start,vmin].forEach(v=>{
+    const t=svgEl('text',{x:padL-5,y:Y(v)+3,'text-anchor':'end','font-size':'9',fill:'#6b5224','font-family':'Georgia,serif'});
+    t.textContent='$'+Math.round(v/1000)+'k'; svg.appendChild(t);
+  });
+  const pts=r=>{let s='';for(let t=0;t<=h;t++){s+=(t?' L':'M')+X(t).toFixed(1)+' '+Y(val(r,t)).toFixed(1);}return s;};
+  // shaded fan between bad and good
+  let area='';for(let t=0;t<=h;t++){area+=(t?' L':'M')+X(t).toFixed(1)+' '+Y(val(good,t)).toFixed(1);}
+  for(let t=h;t>=0;t--){area+=' L'+X(t).toFixed(1)+' '+Y(val(bad,t)).toFixed(1);}
+  area+=' Z';
+  svg.appendChild(svgEl('path',{d:area,fill:'#b9912f',opacity:'.18'}));
+  svg.appendChild(svgEl('path',{d:pts(good),fill:'none',stroke:'#3f6b4a','stroke-width':2}));
+  svg.appendChild(svgEl('path',{d:pts(base),fill:'none',stroke:'#6b5224','stroke-width':2,'stroke-dasharray':'5 3'}));
+  svg.appendChild(svgEl('path',{d:pts(bad),fill:'none',stroke:'#9a3b2f','stroke-width':2}));
+  // end labels
+  const endLab=(r,col,txt)=>{const yv=Y(val(r,h));const t=svgEl('text',{x:W-padR,y:clamp(yv,padT+8,padT+plotH),'text-anchor':'end','font-size':'10','font-weight':'700',fill:col,'font-family':'Georgia,serif'});t.textContent=txt;svg.appendChild(t);};
+  endLab(good,'#3f6b4a','good '+money(val(good,h)));
+  endLab(bad,'#9a3b2f','bad '+money(val(bad,h)));
+  const xl=svgEl('text',{x:(padL+W-padR)/2,y:H-4,'text-anchor':'middle','font-size':'9',fill:'#4a4338','font-family':'Georgia,serif'});
+  xl.textContent='years 0 → '+Math.round(h)+'   ($100k start)'; svg.appendChild(xl);
+}
+
+function conc(){
+  const n=Math.round(clamp(num('conc_n'),1,80));
+  const lbl=document.getElementById('conc_n_v'); if(lbl)lbl.textContent=n;
+  const topShare=Math.min(10,n)/n*100;
+  const idxResem=Math.min(100, 100*(1-Math.exp(-n/22)));
+  const dots=document.getElementById('conc_dots');
+  if(dots){
+    const show=Math.min(n,60); let html='';
+    for(let i=0;i<show;i++){ html+=`<span class="dot ${i<10?'best':'dilute'}"></span>`; }
+    if(n>60) html+=`<span style="font-size:12px;color:var(--ink-soft);align-self:center">+${n-60} more</span>`;
+    dots.innerHTML=html;
+  }
+  document.getElementById('conc_top_bar').style.width=topShare+'%';
+  document.getElementById('conc_top_v').textContent=Math.round(topShare)+'%';
+  document.getElementById('conc_idx_bar').style.width=idxResem+'%';
+  document.getElementById('conc_idx_v').textContent=Math.round(idxResem)+'%';
+  const out=document.getElementById('conc_out'); let cls,msg;
+  if(n<=8){cls='safe';msg=`<span class="tag ok">High conviction.</span> Few enough names that each one can reflect a real, second-level view — and the portfolio is genuinely <i>different</i> from the index, the precondition for beating it. The price is a wider range of outcomes, so each name must clear the survivability test (tool 1).`;}
+  else if(n<=25){cls='neutral';msg=`<span class="tag">Balanced.</span> Your 10 best ideas still hold <b>${Math.round(topShare)}%</b> of capital, but conviction is thinning and resemblance to the index is rising. Ask of every name beyond your best: <i>is this here because it's a great idea, or just to feel diversified?</i>`;}
+  else{cls='warn';msg=`<span class="tag bad">Diworsification.</span> Your best ideas now control only <b>${Math.round(topShare)}%</b> of capital and the book is <b>${Math.round(idxResem)}%</b> a closet index. You're paying active effort to earn a roughly average result. Marks: "you can't take the same actions as everyone else and expect to outperform."`;}
+  out.className='result '+cls; out.innerHTML=msg;
+}
+
+window.addEventListener('load',()=>{try{if(localStorage.getItem(KEY))loadData();}catch(e){}refreshTools();});
+
+// ===== Stress-Test Lab =====
+function num(id){const e=document.getElementById(id);const v=parseFloat(e&&e.value);return isNaN(v)?0:v;}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function sgn(x){return (x>0?'+':(x<0?'−':''))+Math.abs(Math.round(x))+'%';}
+function money(x){return '$'+Math.round(x).toLocaleString();}
+function refreshTools(){survival();mos();fan();conc();}
+const SVGNS='http://www.w3.org/2000/svg';
+function svgEl(tag,attrs){const e=document.createElementNS(SVGNS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);return e;}
+
+function preset(o,d){document.getElementById('st_oshock').value=o;document.getElementById('st_dshock').value=d;survival();}
+
+function survival(){
+  const pv=num('st_pv');
+  let own=clamp(num('st_own'),0,100), debt=clamp(num('st_debt'),0,100);
+  let cash=Math.max(0,100-own-debt);
+  document.getElementById('st_cash').value=Math.round(cash);
+  document.getElementById('st_cashlbl').textContent = (own+debt>100)?'(mix exceeds 100%)':'(remainder)';
+  const oS=num('st_oshock'), dS=num('st_dshock');
+  document.getElementById('st_oshock_v').textContent=sgn(oS);
+  document.getElementById('st_dshock_v').textContent=sgn(dS);
+  const ownVal=pv*(own/100)*(1+oS/100);
+  const debtVal=pv*(debt/100)*(1+dS/100);
+  const cashVal=pv*(cash/100);
+  const newPV=ownVal+debtVal+cashVal;
+  const dd=pv>0?(newPV-pv)/pv*100:0;
+  const spend=num('st_spend'); const bufMonths=num('st_buffer');
+  const monthlySpend=spend/12;
+  const monthsFromCash = monthlySpend>0 ? cashVal/monthlySpend : Infinity;
+  const totalMonths = bufMonths + monthsFromCash;
+  const out=document.getElementById('st_out');
+  let cls,verdict;
+  const head=`<span class="big">${money(newPV)} &nbsp;<span style="font-size:15px;color:var(--ink-soft)">(${sgn(dd)} drawdown)</span></span>`;
+  if(spend<=0){
+    cls='safe';
+    verdict=`<span class="tag ok">Recoverable paper loss.</span> With no withdrawals forcing your hand, this drawdown is <b>volatility, not permanent loss</b> — provided you can hold through it emotionally. The only thing that would turn it permanent is <i>you selling</i>. Marks: risk is the probability of permanent loss, not the size of the wiggle.`;
+  } else if(totalMonths>=24){
+    cls='safe';
+    verdict=`<span class="tag ok">Recoverable — you can hold.</span> Your emergency fund plus the cash sleeve cover roughly <b>${Math.round(totalMonths)} months</b> of spending, so you needn't sell depressed assets to fund life. The drawdown stays a paper loss while ownership recovers. <i>This is what defense is for.</i>`;
+  } else {
+    cls='warn';
+    verdict=`<span class="tag bad">Risk of forced selling → permanent loss.</span> Cash and reserves cover only about <b>${Math.round(totalMonths)} months</b> of spending. In this scenario you'd have to liquidate fallen assets to fund spending — the exact mechanism that turns a temporary decline into a permanent one. Raise the cash/debt buffer until you can carry ~24+ months without selling.`;
+  }
+  out.className='result '+cls;
+  out.innerHTML=head+verdict;
+  drawDonut(own,debt,cash);
+  drawScenarios(pv,own,debt,cash);
+}
+
+const ALLOC_COLORS={own:'#8a6d3b',debt:'#3f6b4a',cash:'#b9912f'};
+function drawDonut(own,debt,cash){
+  const svg=document.getElementById('st_donut'); if(!svg)return; svg.innerHTML='';
+  const total=own+debt+cash || 1;
+  const r=44, cx=60, cy=60, C=2*Math.PI*r;
+  svg.appendChild(svgEl('circle',{cx,cy,r,fill:'none',stroke:'#efe7d7','stroke-width':16}));
+  let offset=0;
+  [['own',own],['debt',debt],['cash',cash]].forEach(([k,v])=>{
+    if(v<=0)return;
+    const frac=v/total, len=frac*C;
+    const c=svgEl('circle',{cx,cy,r,fill:'none',stroke:ALLOC_COLORS[k],'stroke-width':16,
+      'stroke-dasharray':`${len} ${C-len}`,'stroke-dashoffset':-offset,transform:`rotate(-90 ${cx} ${cy})`});
+    svg.appendChild(c); offset+=len;
+  });
+  const t1=svgEl('text',{x:cx,y:cy-2,'text-anchor':'middle','font-size':'20','font-weight':'700',fill:'#211d17','font-family':'Georgia,serif'});
+  t1.textContent=Math.round(own)+'%';
+  const t2=svgEl('text',{x:cx,y:cy+14,'text-anchor':'middle','font-size':'9',fill:'#6b5224','font-family':'Georgia,serif','letter-spacing':'1'});
+  t2.textContent='OWNERSHIP'; svg.appendChild(t1); svg.appendChild(t2);
+  const leg=document.getElementById('st_legend');
+  const rows=[['Ownership',own,ALLOC_COLORS.own],['Debt',debt,ALLOC_COLORS.debt],['Cash',cash,ALLOC_COLORS.cash]];
+  leg.innerHTML=rows.map(([n,v,c])=>`<div class="li"><span class="sw" style="background:${c}"></span>${n} <span class="pc">${Math.round(v)}%</span></div>`).join('');
+}
+
+const SCENARIOS=[['Mild',-15,0],['Recession',-35,5],['2008-type',-50,-5],['Rate shock',-22,-15]];
+function drawScenarios(pv,own,debt,cash){
+  const svg=document.getElementById('st_scenchart'); if(!svg)return; svg.innerHTML='';
+  const W=360,H=170, padL=8,padR=8,padT=20,padB=34;
+  const plotH=H-padT-padB, plotW=W-padL-padR;
+  const baseY=padT; // pv at top
+  // baseline (today = 100%)
+  svg.appendChild(svgEl('line',{x1:padL,y1:baseY,x2:W-padR,y2:baseY,stroke:'#8a6d3b','stroke-width':1,'stroke-dasharray':'4 3'}));
+  const bl=svgEl('text',{x:W-padR,y:baseY-5,'text-anchor':'end','font-size':'9',fill:'#6b5224','font-family':'Georgia,serif'});
+  bl.textContent='today ('+money(pv)+')'; svg.appendChild(bl);
+  const n=SCENARIOS.length, slot=plotW/n, bw=slot*0.5;
+  SCENARIOS.forEach(([name,oS,dS],i)=>{
+    const end=pv*(own/100)*(1+oS/100)+pv*(debt/100)*(1+dS/100)+pv*(cash/100);
+    const dd=pv>0?(end-pv)/pv:0;
+    const frac=pv>0?clamp(end/pv,0,1):0;
+    const x=padL+slot*i+(slot-bw)/2;
+    const h=plotH*(1-frac);
+    const y=baseY;
+    const col = dd<=-0.4?'#9a3b2f':dd<=-0.25?'#b5562f':dd<=-0.12?'#b9912f':'#3f6b4a';
+    svg.appendChild(svgEl('rect',{x,y,width:bw,height:Math.max(1,h),fill:col,rx:3,opacity:'.88'}));
+    const t=svgEl('text',{x:x+bw/2,y:y+h+13,'text-anchor':'middle','font-size':'10','font-weight':'700',fill:'#211d17','font-family':'Georgia,serif'});
+    t.textContent=(dd*100).toFixed(0)+'%'; svg.appendChild(t);
+    const t2=svgEl('text',{x:x+bw/2,y:y+h+25,'text-anchor':'middle','font-size':'9',fill:'#4a4338','font-family':'Georgia,serif'});
+    t2.textContent=name; svg.appendChild(t2);
+  });
+}
+
+function mos(){
+  const val=num('mos_val'), price=num('mos_price'), over=num('mos_over');
+  document.getElementById('mos_over_v').textContent=Math.round(over)+'%';
+  const out=document.getElementById('mos_out');
+  if(val<=0){out.className='result neutral';out.innerHTML='Enter a value estimate above 0.';return;}
+  const margin=(val-price)/val*100;
+  const stressedVal=val*(1-over/100);
+  const protectedNow = price<=stressedVal;
+  const stressedMargin = stressedVal>0 ? (stressedVal-price)/stressedVal*100 : -999;
+  let cls,verdict;
+  if(margin<=0){
+    cls='warn';
+    verdict=`<span class="tag bad">No margin of safety.</span> You'd be paying at or above your own estimate of value — relying on being exactly right, with no room for error. Marks: because you can't predict, you must demand a cushion.`;
+  } else if(protectedNow){
+    cls='safe';
+    verdict=`<span class="tag ok">Still protected.</span> Even if your value estimate is <b>${Math.round(over)}% too high</b>, the true value (${money(stressedVal)}) still exceeds the ${money(price)} price — a remaining cushion of <b>${Math.round(stressedMargin)}%</b>. You can be meaningfully wrong and still avoid permanent loss. <i>That</i> is margin of safety.`;
+  } else {
+    cls='warn';
+    verdict=`<span class="tag bad">Cushion breaks.</span> Your starting margin is ${Math.round(margin)}%, but if your estimate is ${Math.round(over)}% too high, true value falls to ${money(stressedVal)} — <b>below</b> the ${money(price)} price. The margin doesn't survive that error. Pay less, or be far more certain of the value.`;
+  }
+  out.className='result '+cls;
+  out.innerHTML=`<span class="big">${Math.round(margin)}% margin at purchase</span>`+verdict;
+}
+
+function fan(){
+  let own=clamp(num('fan_own'),0,100); const debt=100-own; const h=Math.max(1,num('fan_h'));
+  document.getElementById('fan_debt').value=Math.round(debt);
+  document.getElementById('fan_dlbl').textContent='(100 − ownership)';
+  const blend=(o,d)=> own/100*o + debt/100*d;
+  const bad=blend(num('fan_ow'),num('fan_dw'));
+  const base=blend(num('fan_ob'),num('fan_db'));
+  const good=blend(num('fan_og'),num('fan_dg'));
+  const cum=r=> (Math.pow(1+r/100,h)-1)*100;
+  drawCone(bad,base,good,h);
+  const spread=good-bad;
+  const out=document.getElementById('fan_out');
+  out.className='result neutral';
+  out.innerHTML=`<b>Annualized range:</b> ${sgn(bad)} (bad) &nbsp;·&nbsp; ${sgn(base)} (base) &nbsp;·&nbsp; ${sgn(good)} (good).<br>
+    <b>Over ${Math.round(h)} years, $100,000 becomes</b> ${money(100000*(1+cum(bad)/100))} &middot; ${money(100000*(1+cum(base)/100))} &middot; ${money(100000*(1+cum(good)/100))}.<br>
+    <span style="color:var(--ink-soft);font-style:italic">The gap between good and bad is ${Math.round(spread)} points a year — that width <i>is</i> the risk. A higher base return that widens the fan and worsens the bad case isn't a free lunch; it's compensation for a wider, worse set of outcomes (Concept 7). Don't read these as a forecast.</span>`;
+}
+</script>
+</body>
+</html>
